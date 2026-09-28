@@ -1,0 +1,21 @@
+# 虚拟环境
+.venv/
+venv/
+
+# Python 缓存
+__pycache__/
+*.pyc
+*.pyo
+
+# 测试报告
+reports/
+allure-results/
+allure-report/
+.pytest_cache/
+
+# IDE
+.idea/
+.vscode/
+
+# 系统文件
+.DS_Store

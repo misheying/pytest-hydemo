@@ -1,10 +1,10 @@
 import pytest
-from data.course_data import ADD_COURSE_TEST_DATA, QUERY_COURSE_TEST_DATA
 
 
 class TestCourseFullFlow:
     """课程完整流程测试（新增 → 查询 → 验证）"""
 
+    @pytest.mark.smoke
     def test_add_and_query_full_flow(self, logged_in_client):
         """
         完整流程测试：
@@ -16,7 +16,7 @@ class TestCourseFullFlow:
         import time
 
         print("\n" + "=" * 60)
-        print("🔐 开始课程完整流程测试")
+        print(" 开始课程完整流程测试")
         print("=" * 60)
 
         # 1. 准备课程数据
@@ -24,7 +24,7 @@ class TestCourseFullFlow:
         course_name = f"完整流程测试_{timestamp}"
         course_price = 888
 
-        print(f"\n📌 步骤1: 新增课程")
+        print(f"\n 步骤1: 新增课程")
         print(f"   课程名: {course_name}")
         print(f"   价格: {course_price}")
 
@@ -42,7 +42,7 @@ class TestCourseFullFlow:
         print(f"   ✅ 新增成功: {add_data}")
 
         # 3. 查询列表验证
-        print(f"\n📌 步骤2: 查询课程列表，验证新增课程存在")
+        print(f"\n 步骤2: 查询课程列表，验证新增课程存在")
         list_response = logged_in_client.get_course_list(name=course_name)
         list_data = list_response.json()
 
@@ -59,7 +59,7 @@ class TestCourseFullFlow:
         print(f"   ✅ 课程信息验证通过")
 
         # 4. 按ID查询验证
-        print(f"\ 步骤3: 按ID查询课程详情")
+        print(f"\n 步骤3: 按ID查询课程详情")
         detail_response = logged_in_client.get_course_by_id(course_id)
         detail_data = detail_response.json()
 

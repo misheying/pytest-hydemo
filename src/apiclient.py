@@ -13,7 +13,7 @@ class AIPClient:
     """对被测系统接口的统一封装。"""
 
     # 被测系统的根地址（base url）：所有接口地址都在它后面拼接
-    Base_url = 'http://kdtx-test.itheima.net'
+    Base_url = 'https://kdtx-test.itheima.net'
 
     def __init__(self):
         # 构造方法：每 new 一个 AIPClient 对象时自动执行一次。
@@ -96,13 +96,13 @@ class AIPClient:
             "name": name,
             "subject": subject,
             "price": price,
-            "applicable_person": applicable_person,
+            "applicablePerson": applicable_person,
             "info": info,
         }
         response = self.session.post(url, json=data, headers=self.headers)
         return response
 
-    def get_course_list(self, name="", subject="", price="", applicable_person="", info=""):
+    def get_course_list(self, name="", subject="", price=None, applicable_person="", info=""):
         """查询课程列表（需先登录）。
 
         所有参数都是可选的：传了就按条件过滤，不传就查全部。
@@ -118,11 +118,35 @@ class AIPClient:
         if price is not None:
             params["price"] = price
         if applicable_person:
-            params["applicable_person"] = applicable_person
+            params["applicablePerson"] = applicable_person
         if info:
             params["info"] = info
 
         response = self.session.get(url, params=params, headers=self.headers)
+        return response
+
+    def update_course(self, course_id, name="", subject="", price=None, applicable_person="", info=""):
+        """修改课程（需先登录）。
+
+        参数：
+          course_id        : 课程 id（必填，指定要修改哪门课）
+          name             : 新的课程名称
+          subject          : 新的课程学科
+          price            : 新的课程价格
+          applicable_person: 新的适用人群
+          info             : 新的课程介绍
+        """
+        url = self.Base_url + '/api/clues/course'  # 修改课程的接口地址
+        data = {
+            "id": course_id,
+            "name": name,
+            "subject": subject,
+            "price": price,
+            "applicablePerson": applicable_person,
+            "info": info,
+        }
+        # 修改用 PUT 方法，参数放 body（json=）
+        response = self.session.put(url, json=data, headers=self.headers)
         return response
 
     def get_course_by_id(self, course_id):
@@ -130,6 +154,94 @@ class AIPClient:
         # f-string 把课程 id 拼进地址里，例如 /api/clues/course/123
         url = self.Base_url + f'/api/clues/course/{course_id}'
         response = self.session.get(url, headers=self.headers)
+        return response
+
+    def delete_course(self, course_id):
+        """删除课程（需先登录）。
+
+        参数：
+          course_id : 要删除的课程 id
+        """
+        url = self.Base_url + f'/api/clues/course/{course_id}'  # 删除课程的接口地址
+        response = self.session.delete(url, headers=self.headers)  # 用 DELETE 方法
+        return response
+
+    # ==================== 合同管理接口 ====================
+    def add_contract(self, contract_no, phone, name, subject, course_id, file_name, channel="", activity_id=None):
+        """新增合同（需先登录）。POST /api/contract
+
+        参数：
+          contract_no : 合同编号（必填）
+          phone       : 手机号（必填）
+          name        : 客户姓名（必填）
+          subject     : 意向学科（必填）
+          course_id   : 课程 id（必填）
+          file_name   : 文件名称（必填，合同附件）
+          channel     : 渠道来源（可选，0=线上活动 1=推广介绍）
+          activity_id : 活动信息（可选）
+        """
+        url = self.Base_url + '/api/contract'  # 新增合同接口地址
+        data = {
+            "contractNo": contract_no,
+            "phone": phone,
+            "name": name,
+            "subject": subject,
+            "courseId": course_id,
+            "fileName": file_name,
+            "channel": channel,
+            "activityId": activity_id,
+        }
+        response = self.session.post(url, json=data, headers=self.headers)
+        return response
+
+    def get_contract_list(self, name="", phone="", contract_no="", subject="", course_id=None, channel="", activity_id=None, file_name=""):
+        """查询合同列表（需先登录）。GET /api/contract/list
+
+        所有参数都可选：传了就按条件过滤，不传就查全部。
+        """
+        url = self.Base_url + '/api/contract/list'  # 查询合同列表接口地址
+        params = {}
+        if name:
+            params["name"] = name
+        if phone:
+            params["phone"] = phone
+        if contract_no:
+            params["contractNo"] = contract_no
+        if subject:
+            params["subject"] = subject
+        if course_id is not None:
+            params["courseId"] = course_id
+        if channel:
+            params["channel"] = channel
+        if activity_id is not None:
+            params["activityId"] = activity_id
+        if file_name:
+            params["fileName"] = file_name
+        response = self.session.get(url, params=params, headers=self.headers)
+        return response
+
+    def upload_file(self, file_path):
+        """上传文件（需先登录）。POST /api/common/upload
+
+        参数：
+          file_path : 本地文件路径
+        返回：
+          response : 成功时 body 里带 fileName（上传后的文件地址）
+        """
+        import os
+        url = self.Base_url + '/api/common/upload'  # 文件上传接口地址
+        file_name = os.path.basename(file_path)  # 从路径里取出文件名
+
+        # 关键：上传是 multipart/form-data，不能带 "Content-type": application/json，
+        # 否则服务器解析不了会报 500。所以单独构造 headers，去掉 Content-type，
+        # 让 requests 自动设置成 multipart/form-data; boundary=...
+        headers = {
+            "Authorization": self.headers["Authorization"],
+            "User-Agent": self.headers["User-Agent"],
+        }
+        with open(file_path, 'rb') as f:
+            files = {'file': (file_name, f)}
+            response = self.session.post(url, files=files, headers=headers)
         return response
 
     def close(self):

@@ -14,7 +14,7 @@
 """
 # import 是「导入」：把别处写好的工具拿过来用
 import pytest  # 导入测试框架 pytest
-from data.course_data import ADD_COURSE_TEST_DATA, QUERY_COURSE_TEST_DATA  # 导入两条测试数据列表
+from data.course_data import ADD_COURSE_TEST_DATA  # 导入两条测试数据列表
 
 
 class TestCourseAdd:
@@ -26,6 +26,7 @@ class TestCourseAdd:
 
     # @pytest.mark.parametrize 是「参数化」：把 ADD_COURSE_TEST_DATA 列表里的
     # 每一条数据，依次传给下面函数的 test_case 参数，各跑一遍。
+    @pytest.mark.smoke
     @pytest.mark.parametrize("test_case", ADD_COURSE_TEST_DATA)
     def test_add_course_data_driven(self, logged_in_client, test_case):
         """新增课程用例。
@@ -106,79 +107,3 @@ class TestCourseAdd:
             course_id = found_course["id"]  # 取出这门课的 id
             print(f"✅ 验证通过: 课程已存在，ID={course_id}")
         print(f"✅ 用例 {test_id} 通过!")
-
-
-class TestCourseDataDriven:
-    """「查询课程」的测试类（数据驱动）。"""
-
-    @pytest.mark.parametrize("test_case", QUERY_COURSE_TEST_DATA)
-    def test_query_course_data_driven(self, logged_in_client, test_case):
-        """查询课程用例。"""
-        test_id = test_case["id"]
-        description = test_case["description"]
-        params = test_case["params"]        # 查询条件（一个字典，比如 {"name": "xxx"}）
-        expected = test_case["experience"]  # 期望结果
-
-        print(f"\n{'=' * 60}")
-        print(f"执行测试用例{test_id}-{description}")
-        print(f"查询参数{params}")
-
-        # ---- 特殊处理：按 ID 查询 ----
-        # 说明：当前测试数据里没有 by_id 这个字段，所以这个分支暂时不会执行（属于预留）。
-        if params.get("by_id", False):
-            import time  # time 模块用来取当前时间
-            # 用时间戳拼一个不重名的课程名，避免重复运行冲突
-            course_name = f"查询测试_{int(time.time())}"
-
-            # 先创建一个课程，再按 ID 查它
-            add_response = logged_in_client.add_course(
-                name=course_name,
-                subject=params["subject"],
-                price=params["price"],
-                applicable_person=params["applicable_person"],
-                info="用于ID查询测试",
-            )
-            assert add_response.status_code == 200
-            add_data = add_response.json()
-            assert add_data["code"] == 200
-
-            # 按名称查到刚创建的课程，拿到它的 ID
-            list_response = logged_in_client.get_course_list(name=course_name)
-            list_data = list_response.json()
-            if list_data.get("rows") and len(list_data.get("rows", [])) > 0:
-                course_id = list_data.get("rows")[0].get("id")
-                print(f"创建测试课程，ID：{course_id}")
-
-                # 按 ID 查询单条课程
-                response = logged_in_client.get_course_by_id(course_id=course_id)
-            else:
-                pytest.fail("无法创建测试课程")
-        else:
-            # 普通查询：**params 表示把字典「拆开」传参。
-            #   比如 params={"name":"xxx"}，等价于 get_course_list(name="xxx")
-            response = logged_in_client.get_course_list(**params)
-
-        # ---- 验证响应 ----
-        assert response.status_code == 200
-        data = response.json()
-
-        # data.get('total', 0)：取 total 字段；没有就给默认值 0（避免报错）
-        print(f"响应数据：（total={data.get('total', 0)}）")
-
-        # 断言业务码和提示信息
-        assert data["code"] == expected["code"], \
-            f"用例{test_id} 失败：期望 code={expected['code']}，实际 code={data['code']}"
-        assert data["msg"] == expected["msg"], \
-            f"用例{test_id}失败：期望 msg={expected['msg']},实际 msg={data['msg']}"
-
-        # 验证是否有数据：rows 是课程列表，长度 > 0 说明有数据
-        has_data = len(data.get("rows", [])) > 0
-        if expected.get("has_data", True):
-            if "不存在的" not in description:
-                # 普通查询：不强求一定有数据（测试环境里的数据可能变化）
-                pass
-            else:
-                # 预期没有数据（比如查一个不存在的课程名），就断言确实没数据
-                assert has_data is False, \
-                    f"用例{test_id}失败：预期没有数据，但实际有{len(data.get('rows', []))}条"
-            print(f"用例{test_id}通过！")

@@ -60,6 +60,8 @@ class TestLoginDataDriven:
     # @pytest.mark.parametrize：pytest 的「参数化」装饰器，作用是把多条数据喂给同一个测试函数。
     #   "test_case"          ：参数名，会传入下面测试函数的同名参数
     #   LOGIN_TEST_DATA_JSON ：数据来源（一个列表），列表里有几项，就会生成几条测试用例
+    @pytest.mark.smoke
+    @pytest.mark.login
     @pytest.mark.parametrize("test_case", LOGIN_TEST_DATA_JSON)
     def test_login_data_driven(self, login_client, captcha_client, test_case):
         """核心用例：一份代码，跑完数据文件里的所有场景。
