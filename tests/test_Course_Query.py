@@ -8,6 +8,7 @@
 查询接口：GET /api/clues/course/list
 查询参数（都可选）：name、subject、price、applicable_person、info
 """
+import allure
 import pytest
 
 
@@ -29,6 +30,7 @@ class TestCourseQuery:
         SINGLE_QUERY_CASES,
         ids=[case[0] for case in SINGLE_QUERY_CASES],
     )
+    @allure.title("单条件查询")
     def test_query_single_condition(self, logged_in_client, desc, params):
         """单条件查询：一次只传一个查询条件。"""
         print(f"\n {desc}")#打印用例描述

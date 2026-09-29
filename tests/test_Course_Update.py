@@ -8,12 +8,16 @@
 测试流程：先创建一门课 → 修改它 → 查询详情验证修改是否生效
 """
 import time
+
+import allure
 import pytest
 
-
+@allure.feature("修改课程")
 class TestCourseUpdate:
     """修改课程 测试类。"""
 
+    @allure.story("修改课程")
+    @allure.title("修改课程成功")
     @pytest.mark.smoke
     def test_update_course(self, logged_in_client, created_course_id):
         """修改课程：改名称和价格，然后查询验证。"""

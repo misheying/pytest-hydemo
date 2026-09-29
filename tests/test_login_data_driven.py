@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-
+import allure
 # 导入第三方库 pytest：测试框架
 import pytest
 # 导入自己封装的 API 客户端类（负责发 HTTP 请求，封装在 src/apiclient.py）
@@ -17,7 +17,7 @@ from data.login_data import LOGIN_TEST_DATA_JSON
 好处：新增一条用例，只需要在数据文件里加一个字典，不用改任何测试代码。
 """
 
-
+@allure.feature("登录模块")
 class TestLoginDataDriven:
     """登录测试类 —— 数据驱动方式。
 
@@ -60,6 +60,8 @@ class TestLoginDataDriven:
     # @pytest.mark.parametrize：pytest 的「参数化」装饰器，作用是把多条数据喂给同一个测试函数。
     #   "test_case"          ：参数名，会传入下面测试函数的同名参数
     #   LOGIN_TEST_DATA_JSON ：数据来源（一个列表），列表里有几项，就会生成几条测试用例
+    @allure.story("登陆成功")
+    @allure.title("登陆成功11")
     @pytest.mark.smoke
     @pytest.mark.login
     @pytest.mark.parametrize("test_case", LOGIN_TEST_DATA_JSON)
