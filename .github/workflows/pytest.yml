@@ -5,11 +5,9 @@ on:
   name: Pytest CI
 
   on: [ push ]
-
   #  加入这两行，赋予写权限
   permissions:
     contents: write
-
   jobs:
     test:
       runs-on: ubuntu-latest
