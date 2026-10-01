@@ -53,7 +53,7 @@ class TestCourseFullFlow:
         print(f"   ✅ 找到课程，ID: {course_id}")
 
         # 验证课程信息
-        found_course = list_data["rows"][0]
+       # found_course = list_data["rows"][0]
         assert found_course["name"] == course_name
         assert found_course["price"] == course_price
         print(f"   ✅ 课程信息验证通过")
