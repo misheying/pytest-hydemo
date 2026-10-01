@@ -54,3 +54,42 @@ jobs:
         with:
           name: allure-report
           path: allure-report/
+
+      # 加入邮件通知
+      - name: Notify on failure
+        if: failure()
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: smtp.163.com # 👈 改成你邮箱 的服务器
+          server_port: 465
+          username: ${{ secrets.MAIL_USERNAME }}
+          password: ${{ secrets.MAIL_PASSWORD }}
+          subject: "测试失败：${{ github.repository }}"
+          to: 15982870455@163.com # 👈 改成了你真实的接收邮箱
+          from: GitHub Actions
+          body: "请查看：${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+
+      #缓存依赖，加快运行，第二次运行时会快 30%~50%
+      - name: Cache pip
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('requirements.txt') }}
+
+      #生成 Allure 在线报告（部署到 GitHub Pages）
+      - name: Generate Allure report
+        if: always()
+        run: |
+          # 需要先安装 allure 命令行
+          sudo apt-get install -y default-jre
+          wget https://github.com/allure-framework/allure2/releases/download/2.30.0/allure-2.30.0.tgz
+          tar -zxvf allure-2.30.0.tgz
+          ./allure-2.30.0/bin/allure generate ./allure-results -o ./allure-report
+
+      - name: Deploy to GitHub Pages
+        if: always()
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./allure-report
+      #效果 每次 push 后，报告自动发布到一个网址，团队所有人都能访问
