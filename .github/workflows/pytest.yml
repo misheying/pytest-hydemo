@@ -2,6 +2,18 @@ name: Pytest CI
 
 # 触发条件：push 或 PR 到 main/master 时自动运行
 on:
+  name: Pytest CI
+
+  on: [ push ]
+
+  #  加入这两行，赋予写权限
+  permissions:
+    contents: write
+
+  jobs:
+    test:
+      runs-on: ubuntu-latest
+      # ... 剩下的代码保持不变
   push:
     branches: [ main, master ]
   pull_request:
