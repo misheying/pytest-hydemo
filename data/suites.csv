@@ -1,0 +1,89 @@
+"DESCRIPTION","DURATION IN MS","NAME","PARENT SUITE","START TIME","STATUS","STOP TIME","SUB SUITE","SUITE","TEST CLASS","TEST METHOD"
+"多条件查询：一次同时传多个条件。
+
+        多个条件之间是「并且」（AND）关系：要同时满足所有条件，才会被查出来。
+        比如 {""subject"":""6"", ""price"":900} 表示「学科是 6 且 价格是 900」。
+        ","346","test_query_multi_condition[\u9002\u7528\u4eba\u7fa4+\u4ef7\u683c]","tests","2026-10-01","passed","2026-10-01","TestCourseQuery","test_Course_Query","",""
+"多条件查询：一次同时传多个条件。
+
+        多个条件之间是「并且」（AND）关系：要同时满足所有条件，才会被查出来。
+        比如 {""subject"":""6"", ""price"":900} 表示「学科是 6 且 价格是 900」。
+        ","353","test_query_multi_condition[\u5b66\u79d1+\u4ef7\u683c]","tests","2026-10-01","passed","2026-10-01","TestCourseQuery","test_Course_Query","",""
+"多条件查询：一次同时传多个条件。
+
+        多个条件之间是「并且」（AND）关系：要同时满足所有条件，才会被查出来。
+        比如 {""subject"":""6"", ""price"":900} 表示「学科是 6 且 价格是 900」。
+        ","1955","test_query_multi_condition[\u5b66\u79d1+\u9002\u7528\u4eba\u7fa4]","tests","2026-10-01","passed","2026-10-01","TestCourseQuery","test_Course_Query","",""
+"用例5（反向）：缺少用户名（空字符串）→ 登录失败。","427","test_login_fail4","tests","2026-10-01","passed","2026-10-01","TestLogin","tests_login","",""
+"用例3（反向）：错误用户名 + 正确密码 → 登录失败。","440","test_login_fail2","tests","2026-10-01","passed","2026-10-01","TestLogin","tests_login","",""
+"
+        完整流程测试：
+        1. 新增课程
+        2. 查询列表验证课程存在
+        3. 按ID查询验证课程详情
+        ","954","test_add_and_query_full_flow","tests","2026-10-01","passed","2026-10-01","TestCourseFullFlow","test_Course_FullFlow","",""
+"单条件查询：一次只传一个查询条件。","356","单条件查询","tests","2026-10-01","passed","2026-10-01","TestCourseQuery","test_Course_Query","",""
+"核心用例：一份代码，跑完数据文件里的所有场景。
+
+        参数说明（都由 pytest 自动注入，不需要手动传）：
+          login_client  ：夹具1 提供的客户端对象
+          captcha_client：夹具2 提供的验证码信息（含 uuid）
+          test_case     ：parametrize 注入的「一条测试数据」（一个字典）
+        ","429","登陆成功11","tests","2026-10-01","passed","2026-10-01","TestLoginDataDriven","test_login_data_driven","",""
+"核心用例：一份代码，跑完数据文件里的所有场景。
+
+        参数说明（都由 pytest 自动注入，不需要手动传）：
+          login_client  ：夹具1 提供的客户端对象
+          captcha_client：夹具2 提供的验证码信息（含 uuid）
+          test_case     ：parametrize 注入的「一条测试数据」（一个字典）
+        ","425","登陆成功11","tests","2026-10-01","passed","2026-10-01","TestLoginDataDriven","test_login_data_driven","",""
+"上传文件 + 新增合同 + 查询验证。","972","test_add_and_query_contract","tests","2026-10-01","passed","2026-10-01","TestContract","test_Contract","",""
+"核心用例：一份代码，跑完数据文件里的所有场景。
+
+        参数说明（都由 pytest 自动注入，不需要手动传）：
+          login_client  ：夹具1 提供的客户端对象
+          captcha_client：夹具2 提供的验证码信息（含 uuid）
+          test_case     ：parametrize 注入的「一条测试数据」（一个字典）
+        ","280","登陆成功11","tests","2026-10-01","passed","2026-10-01","TestLoginDataDriven","test_login_data_driven","",""
+"单条件查询：一次只传一个查询条件。","2175","单条件查询","tests","2026-10-01","passed","2026-10-01","TestCourseQuery","test_Course_Query","",""
+"新增课程用例。
+
+        这个函数有 3 个参数，但调用时我们一个都不用传，pytest 会自动填：
+          self             ：代表当前测试类对象（固定写法，不用管）
+          logged_in_client ：conftest.py 里定义好的「已登录客户端」夹具
+          test_case        ：一条测试数据（一个「字典」，形如 {""id"":..., ""course"":...}）
+        ","933","test_add_course_data_driven[test_case0]","tests","2026-10-01","passed","2026-10-01","TestCourseAdd","test_course_data_driven","",""
+"从最早创建时间开始，删除 10 条课程。","0","test_delete_earliest_10_courses","tests","2026-10-01","skipped","2026-10-01","TestCourseDelete","test_Course_Delete","",""
+"单条件查询：一次只传一个查询条件。","592","单条件查询","tests","2026-10-01","passed","2026-10-01","TestCourseQuery","test_Course_Query","",""
+"核心用例：一份代码，跑完数据文件里的所有场景。
+
+        参数说明（都由 pytest 自动注入，不需要手动传）：
+          login_client  ：夹具1 提供的客户端对象
+          captcha_client：夹具2 提供的验证码信息（含 uuid）
+          test_case     ：parametrize 注入的「一条测试数据」（一个字典）
+        ","443","登陆成功11","tests","2026-10-01","passed","2026-10-01","TestLoginDataDriven","test_login_data_driven","",""
+"用例2（反向）：正确用户名 + 错误密码 → 登录失败。","445","test_login_fail","tests","2026-10-01","passed","2026-10-01","TestLogin","tests_login","",""
+"多条件查询：一次同时传多个条件。
+
+        多个条件之间是「并且」（AND）关系：要同时满足所有条件，才会被查出来。
+        比如 {""subject"":""6"", ""price"":900} 表示「学科是 6 且 价格是 900」。
+        ","578","test_query_multi_condition[\u540d\u79f0+\u5b66\u79d1]","tests","2026-10-01","passed","2026-10-01","TestCourseQuery","test_Course_Query","",""
+"核心用例：一份代码，跑完数据文件里的所有场景。
+
+        参数说明（都由 pytest 自动注入，不需要手动传）：
+          login_client  ：夹具1 提供的客户端对象
+          captcha_client：夹具2 提供的验证码信息（含 uuid）
+          test_case     ：parametrize 注入的「一条测试数据」（一个字典）
+        ","438","登陆成功11","tests","2026-10-01","passed","2026-10-01","TestLoginDataDriven","test_login_data_driven","",""
+"用例1（正向）：正确用户名 + 正确密码 + 正确验证码 → 登录成功。","424","test_login_success","tests","2026-10-01","passed","2026-10-01","TestLogin","tests_login","",""
+"单条件查询：一次只传一个查询条件。","4441","单条件查询","tests","2026-10-01","passed","2026-10-01","TestCourseQuery","test_Course_Query","",""
+"用例4（反向）：正确用户名 + 正确密码 + 错误验证码 → 登录失败。","304","test_login_fail3","tests","2026-10-01","passed","2026-10-01","TestLogin","tests_login","",""
+"用例6（反向）：缺少密码（空字符串）→ 登录失败。","440","test_login_fail5","tests","2026-10-01","passed","2026-10-01","TestLogin","tests_login","",""
+"修改课程：改名称和价格，然后查询验证。","856","修改课程成功","tests","2026-10-01","passed","2026-10-01","TestCourseUpdate","test_Course_Update","",""
+"核心用例：一份代码，跑完数据文件里的所有场景。
+
+        参数说明（都由 pytest 自动注入，不需要手动传）：
+          login_client  ：夹具1 提供的客户端对象
+          captcha_client：夹具2 提供的验证码信息（含 uuid）
+          test_case     ：parametrize 注入的「一条测试数据」（一个字典）
+        ","445","登陆成功11","tests","2026-10-01","passed","2026-10-01","TestLoginDataDriven","test_login_data_driven","",""
