@@ -58,8 +58,7 @@ jobs:
           curl -L -o allure.tgz https://repo1.maven.org/maven2/io/qameta/allure/allure-commandline/2.46.1/allure-commandline-2.46.1.tgz
           mkdir -p allure-cli
           tar -xzf allure.tgz -C allure-cli --strip-components=1
-          echo "$PWD/allure-cli/bin" >> "$GITHUB_PATH"
-          allure generate ./allure-results -o ./allure-report --clean
+          ./allure-cli/bin/allure generate ./allure-results -o ./allure-report --clean
 
       # 8. 上传 HTML 报告（测试失败也上传，方便排查）
       - name: Upload Allure Report
@@ -88,5 +87,5 @@ jobs:
           password: ${{ secrets.MAIL_PASSWORD }}
           subject: "测试失败：${{ github.repository }}"
           to: 15982870455@163.com
-          from: GitHub Actions
+          from: ${{ secrets.MAIL_USERNAME }}
           body: "请查看：${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
