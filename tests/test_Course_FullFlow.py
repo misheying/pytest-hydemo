@@ -71,4 +71,3 @@ class TestCourseFullFlow:
         print("\n" + "=" * 60)
         print("✅ 完整流程测试通过!")
         print("=" * 60)
-        print("888888")
